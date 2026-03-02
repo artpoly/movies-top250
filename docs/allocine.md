@@ -1,6 +1,6 @@
 ---
 icon: material/ticket-account
-title: "AlloCiné 高分电影（观众评选）"
+title: "AlloCiné高分电影-观众榜"
 ---
 
 <script>

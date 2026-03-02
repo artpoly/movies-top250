@@ -1,6 +1,6 @@
 ---
 icon: material/ticket
-title: "AlloCiné 高分电影（媒体评选）"
+title: "AlloCiné高分电影-媒体榜"
 ---
 
 <script>

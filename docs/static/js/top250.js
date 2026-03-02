@@ -1,9 +1,11 @@
 const BRANCH_NAME = "main";
 const OWNER_NAME = "fantribe";
 const DATA_SOURCES = [
+  "https://raw.githubusercontent.com/{owner}/{repo}/refs/heads/{branch}/{file}",
   "https://cdn.jsdmirror.com/gh/{owner}/{repo}@{branch}/{file}",
   "https://cdn.jsdelivr.net/gh/{owner}/{repo}@{branch}/{file}",
-  "https://raw.githubusercontent.com/{owner}/{repo}/refs/heads/{branch}/{file}",
+  "https://cdn.jsdelivr.net/gh/{owner}/{repo}@{branch}/{file}",
+  "https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo}/refs/heads/{branch}/{file}",
 ];
 
 function formatStr(template, params) {
@@ -94,9 +96,6 @@ function nvl(...args) {
 }
 
 function getRank(rank) {
-  if (isNotNull(rank)) {
-    return "-";
-  }
   if (!isNaN(Number(rank), 10)) {
     return Number(rank, 10);
   }
@@ -330,9 +329,11 @@ function process(repo, filePath, limitDate) {
       const updateTime = data["extra"]["modify_time"]
         ? data["extra"]["modify_time"]
         : data["update_time"];
-      const updateInfo = `<i>最新更新: ${updateTime}<i>`;
+      const siteUrl = data["description"]["source"];
+      const updateInfo = `<i>最新更新: ${updateTime.split("T")[0]}<i>`;
       const quote = document.createElement("blockquote");
-      quote.innerHTML = subtitle ? `${subtitle}<br><br>${updateInfo}` : updateInfo;
+      const text = subtitle ? `${subtitle}<br><br>${updateInfo}` : updateInfo;
+      quote.innerHTML = `<a target="_blank" href="${siteUrl}">网站</a><br><br>${text}`;
       const dataDiv = document.getElementById("dataInfo");
       dataDiv.innerHTML = "";
       dataDiv.appendChild(quote);
@@ -397,7 +398,7 @@ class MovieRankingApp {
   constructor(config = {}) {
     // Merge with default config
     this.repoConfig = { ...DEFAULT_CONFIG, ...config };
-    console.log("config", this.repoConfig);
+    // console.log("config", this.repoConfig);
     this.initialize();
   }
 
